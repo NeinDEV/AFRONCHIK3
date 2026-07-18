@@ -1,0 +1,16 @@
+import { Pool } from "pg";
+import { config } from "../config";
+
+// Neon (va aksariyat boshqa cloud Postgres provayderlari) SSL talab qiladi,
+// lekin ko'pincha o'z-o'ziga imzolangan sertifikat bilan — shu sabab
+// rejectUnauthorized: false qo'yilgan.
+export const pool = new Pool({
+  connectionString: config.databaseUrl,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
+
+pool.on("error", (err) => {
+  console.error("[db] Kutilmagan pool xatosi:", err);
+});
