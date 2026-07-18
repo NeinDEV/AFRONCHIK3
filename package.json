@@ -1,16 +1,32 @@
-import { Pool } from "pg";
-import { config } from "../config";
-
-// Neon (va aksariyat boshqa cloud Postgres provayderlari) SSL talab qiladi,
-// lekin ko'pincha o'z-o'ziga imzolangan sertifikat bilan — shu sabab
-// rejectUnauthorized: false qo'yilgan.
-export const pool = new Pool({
-  connectionString: config.databaseUrl,
-  ssl: {
-    rejectUnauthorized: false,
+{
+  "name": "attendance-bot",
+  "version": "1.0.0",
+  "description": "O'zbek auditoriyasi uchun xodimlar davomati va oylik hisoblash Telegram boti",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && mkdir -p dist/db && cp src/db/schema.sql dist/db/schema.sql",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "migrate": "tsx src/db/migrate.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
-});
-
-pool.on("error", (err) => {
-  console.error("[db] Kutilmagan pool xatosi:", err);
-});
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "grammy": "^1.24.1",
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
+    "dayjs": "^1.11.11",
+    "node-cron": "^3.0.3",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "tsx": "^4.16.2",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.10",
+    "@types/pg": "^8.11.6",
+    "@types/node-cron": "^3.0.11"
+  }
+}
